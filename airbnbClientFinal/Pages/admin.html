@@ -1,0 +1,203 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Admin</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+
+    <style type="text/css">
+
+        button {
+            margin-left: 10px;
+        }
+    </style>
+
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <!--<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"></script>-->
+    <script src="../JS/ajaxCalls.js"></script>
+
+    <link href="../CSS/StyleSheet.css" rel="stylesheet" />
+
+    <script>
+        $(document).ready(function () {
+
+               if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
+            let port = "7270";
+            server = `https://localhost:${port}/`;
+
+                }
+            else {
+                server = "https://proj.ruppin.ac.il/cgroup53/test2/tar1/";
+            }
+            api = server + "api/Users";
+            ajaxCall("GET", api, "", getSuccess, getError);
+            $(document).on("click", "#logoutBTN", LogOut);
+            // handle with the active status change
+            $(document).on('change', '.statusCheckbox', function () {
+                let rowData = tbl.row($(this).closest('tr')).data();
+                let isActive = this.checked;
+                let editUser = {
+                    firstName: rowData.firstName,
+                    familyName: rowData.familyName,
+                    email: rowData.email,
+                    password: rowData.password,
+                    isActive: isActive
+                };
+                ajaxCall("PUT", api, JSON.stringify(editUser), putSCB, putECB);
+
+            });
+            $("#generateReportBtn").click(function () {
+                apiV = server + `api/vacations/averagePrice`;
+                let selectedMonth = Number($("#monthDropdown").val());
+                console.log(selectedMonth);
+                ajaxCall("GET", apiV, { month: selectedMonth }, GetAvgVacationsSCB, GetAvgVacationsECB);
+
+            });
+
+        });
+
+        function LogOut() {
+            window.location.href = "flats.html";
+            // Clear session storage
+            sessionStorage.clear();
+        }
+
+    
+        function getSuccess(usersdata) {
+            users = usersdata; // keep the cars array in a global variable;
+            try {
+                tbl = $('#UsersTable').DataTable({
+                    data: usersdata,
+                    pageLength: 5,
+                    columns: [
+
+                        { data: 'firstName', title: 'First Name' },
+                        { data: 'familyName', title: 'Family Name' },
+                        { data: 'email', title: 'Email Address' },
+                        { data: 'password', title: 'Password' },
+                        {
+                            data: 'isActive', title: 'Active', render: function (data, type, row, meta) {
+                                return '<input type="checkbox" class="statusCheckbox" data-UserRow="' + row.email + '" ' + (data ? 'checked' : '') + '>';
+                            }
+                        },
+                        { data: 'isAdmin', title: 'Admin' },
+                       ]
+                       
+                });
+            }
+
+            catch (err) {
+                alert(err);
+            }
+        }
+
+        // this function is activated in case of a failure
+        function getError(err) {
+            swal("Error: " + err);
+        }
+
+
+        //handle the updateUser ajax
+        function putSCB(suc) {
+            if (suc == true) {
+                /*                swal("Active Status Change!", "", "success");*/
+                alert("השתנתה אקטיבציה למשתמש");
+            }
+        }
+        function putECB(err) {
+            console.log(err)
+            swal("error!", `status:${err.status}`, "error");
+        }
+        function GetAvgVacationsSCB(obj) {
+            let tableBody = $("#reportTable tbody");
+            tableBody.empty(); // Clear existing rows
+
+            // Iterate over each object in the data array and append a row to the table body
+            obj.forEach(item => {
+                let row = `<tr><td>${item.city}</td><td>${item.averagePricePerNight}</td></tr>`;
+                tableBody.append(row);
+            });
+
+            // Show the table if it was hidden
+            $("#reportTable").show();
+
+            if (obj.length == 0) {
+                tableBody.append(`<tr><td colspan="2">אין נתונים בחודש זה </td></tr>`);
+            }
+        }
+
+        function GetAvgVacationsECB(err) {
+            swal("error!", `status:${err.status}`, "error");
+        }
+
+
+    </script>
+</head>
+<body>
+    <div class="container-fluid">
+        <h1 class="bigT2">Admin</h1>
+        <input type="button" id="logoutBTN" class="BTN3 btn btn-info btn-lg" value="התנתקות" />
+    </div>
+    <div class="container">
+        <form id="pForm">
+            <table id="UsersTable" class="display nowrap" style="width:100%">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Email</th>
+                        <th>First Name</th>
+                        <th>Familiy Name</th>
+                        <th>Password</th>
+                        <th>Active</th>
+                    </tr>
+                </thead>
+            </table>
+
+        </form>
+        <select id="monthDropdown">
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+        </select>
+        <button id="generateReportBtn">Generate Report</button>
+        <div id="reportResults" class="container">
+            <table id="reportTable" class="table table-striped" hidden>
+                <thead>
+                    <tr>
+                        <th>City</th>
+                        <th>Average Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,402 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title> Flats </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"></script>
+    <script src="../JS/ajaxCalls.js"></script>
+
+    <link href="../CSS/StyleSheet.css" rel="stylesheet" />
+
+    <script>
+        $(document).ready(function () {
+            let port = "7270";
+            server = `https://localhost:${port}/`;
+            if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
+                let port = "7270";
+                server = 'https://localhost:' + port;
+
+            }
+            else {
+                server = "https://proj.ruppin.ac.il/cgroup53/test2/tar1/";
+            }
+            $("#Fform").submit(submitFlat);
+            $(document).on("click", "#logoutBTN", LogOut);
+            getFlats();
+        
+        })
+        function getFlats() {
+            api = server + "api/Flats";
+            ajaxCall("GET", api, "", getSCB, getECB);
+        
+        }
+
+        // success callback function
+        function getSCB(FlatsList) {
+            if (sessionStorage.UsersSession != null) {
+                ph = "";
+                for (var i = 0; i < FlatsList.length; i++) {
+
+                    ph += "<div class='card col-3'>";
+                    ph += "<h3>Flat Details</h3>";
+                    ph += "<div class='card-content'>";
+                    ph += "<p> Id: " + FlatsList[i].id1 + "</p>";
+                    ph += "<p> City " + FlatsList[i].city1 + "</p>";
+                    ph += "<p> Address: " + FlatsList[i].address1 + "</p>";
+                    ph += "<p> Price: " + FlatsList[i].price1 + "</p>";
+                    ph += "<p> Number of rooms " + FlatsList[i].numberOfRoom1 + "</p>";
+                    ph += "<button id='orderBTN' onclick='FlatSelection(" + FlatsList[i].id1 + ")'>Order</button>";
+                    ph += "</div>";
+                    ph += "</div>";
+
+                }
+                document.getElementById("ph").innerHTML = ph;
+            }
+           
+        }
+        function FlatSelection(chosenFlatId) {
+            // Save flatId in sessionStorage
+            sessionStorage.setItem('chosenFlatId', chosenFlatId);
+
+            window.location.href = 'vacations.html';
+
+        }
+
+        // error callback function
+        function getECB(err) {
+            console.log(err);
+        }
+
+
+        function submitFlat() {
+            AllFlats = {
+                Id1: parseInt($("#IdTB").val()),
+                City1: $("#CityTB").val(),
+                Address1: $("#AdTB").val(),
+                NumberOfRoom1: parseInt($("#RoomTB").val()),
+                Price1: parseFloat($("#PriceTB").val())
+
+            }
+
+            api = server + "api/Flats";
+
+            ajaxCall("POST", api, JSON.stringify(AllFlats), postSCB, postECB);
+            return false;
+        }
+        // success callback function
+        function postSCB(res) {
+            if (res == false) {
+                alert("עשית משהו לא נכון");
+            }
+            console.log(res);
+            getFlats();
+            alert("דירה נכנסה למערכת");
+        }
+
+        // error callback function
+        function postECB(err) {
+
+            console.log(err);
+        }
+        function loginUser() {
+            let email = document.getElementById("regUsername").value;
+            let firstName = "";
+            let familyName = "";
+            let password = document.getElementById("regPassword").value;
+            var userData = { FirstName: firstName, FamilyName: familyName, Email: email, Password: password };
+                api = server + "api/Users/Login";
+                ajaxCall("POST", api, JSON.stringify(userData), LogSCB, logECB);
+
+        }
+
+        function LogSCB(res1) {
+
+            if (document.getElementById("regUsername").value == "" || document.getElementById("regPassword").value == "") {
+                alert("משהו חסר");
+            }
+            else {
+                sessionStorage.setItem("UsersSession", JSON.stringify(res1));
+                if (JSON.parse(sessionStorage.UsersSession).firstName == null) {
+                    alert("לא קיים במערכת");
+                }
+                else {
+                if (res1.email == 'admin@gmail.com' && res1.password == 'admin') {
+                    window.open('admin.html', '_self');
+                    return;
+                }
+                else if (res1.isActive == false) {
+                    alert("אתה כבר לא אקטיבי במערכת");
+                    }
+                else {
+            alert("נכנסת בהצלחה למערכת");
+                getFlats();
+                    $('.registration').removeAttr('hidden');
+                    document.getElementById('signin1').style.display = 'none';
+                    document.getElementById('reg1').style.display = 'none';
+                }
+                }
+            }
+        }
+        function logECB(err1) {
+            alert("המערכת לא מצאה אותך");
+        }
+        function registerUsers() {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            let nameRegex = /^[a-zA-Z]+$/;
+
+            if (!emailRegex.test($("#newMail").val())) {
+                alert("מייל לא תקין");
+            }
+
+            else {
+                if ($("#Fname").val() == "" || $("#famName").val() == "" || $("#newPassword").val() == "" || !nameRegex.test($("#Fname").val()) || !nameRegex.test($("#famName").val())) {
+                    alert(" פספסת כמה נתונים או פורמט לא תקין");
+                }
+                //else if (!nameRegex.test($("#Fname").val()) || !nameRegex.test($("#famName").val())) {
+                //    alert("פורמט לא תקין");
+                //}
+
+                else {
+
+                    AllReg = {
+                        FirstName: ($("#Fname").val()),
+                        FamilyName: ($("#famName").val()),
+                        Email: ($("#newMail").val()),
+                        Password: ($("#newPassword").val())
+                    }
+
+                    api = server + "api/Users/Register";
+                    ajaxCall("POST", api, JSON.stringify(AllReg), RegSCB, RegECB);
+                }
+            }
+        }
+        function RegSCB(res) {
+         
+            sessionStorage.setItem("RegStorage", res);
+            alert("נכנסת בהצלחה למאגר");
+
+        }
+        function RegECB(err) {
+            alert("המערכת לא מצאה אותך");
+        }
+        function UpdateMe() {
+            var email1 = document.getElementById("regUsername").value;
+            var firstName1 = document.getElementById("MyName").value;
+            var familyName1 = document.getElementById("MyfamilyName").value;
+            var password1 = document.getElementById("Mypassword").value;
+            var userUpdate = { FirstName: firstName1, FamilyName: familyName1, Email: email1, Password: password1 };
+            api = server + "api/Users";
+            ajaxCall("PUT", api, JSON.stringify(userUpdate), UpSCB, UpECB);
+        }
+        function UpSCB(res) {
+            let nameRegex = /^[a-zA-Z]+$/;
+
+            if (firstName1 == "" || familyName1 == "" || password1 == "") {
+                alert("פספסת כמה נתונים");
+            }
+            else if (!nameRegex.test(firstName1) || !nameRegex.test(familyName1)) {
+                alert("פורמט לא תקין");
+            }
+            else {
+
+            alert("פרטיך עודכנו במערכת");
+            }
+
+        }
+        function UpECB(err) {
+            alert("משהו לא נכנס כשורה");
+        }
+        function LogOut() {
+            window.location.href = "flats.html";
+            sessionStorage.clear();
+        }
+    </script>
+
+
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <h1 class="bigT">Flats</h1>
+        <div class="row">
+            <div class=" col-sm-4 col-md-4 col-lg-4">
+                <p id="welcomes"></p>
+                <input type="button" id="signin1" class="BTN3 btn btn-info btn-lg registration" value="הרשמה" onclick="document.getElementById('userRegist').style.display='block'" />
+                <input type="button" id="reg1" class="BTN3 btn btn-info btn-lg registration" value="התחברות" onclick="document.getElementById('userLogin').style.display='block'" />
+                <input type="button" class="BTN3 btn btn-info btn-lg registration" value="עדכון פרטים אישיים" onclick="document.getElementById('userUpdate').style.display='block'" hidden />
+                <input type="button" id="logoutBTN" class="BTN3 btn btn-info btn-lg" value="התנתקות" />
+            </div>
+            <!--login-->
+            <div id="userLogin" class="modal">
+                <span onclick="document.getElementById('userLogin').style.display='none'"
+                      class="close" title="Close Modal">&times;</span>
+
+                <!-- Modal Content -->
+                <form class="modal-content " id="loginForm">
+
+
+                    <div class="container">
+                        <label for="uname"><b>Email</b></label>
+                        <input type="text" id="regUsername" placeholder="Enter Username" name="uname" required>
+
+                        <label for="psw"><b>Password</b></label>
+                        <input type="password" id="regPassword" placeholder="Enter Password" name="psw" required>
+
+
+                        <label>
+                            <input type="checkbox" checked="checked" name="remember"> Remember me
+                        </label>
+                    </div>
+
+                    <div class="clearfix">
+                        <button type="button" onclick="document.getElementById('userLogin').style.display='none'" class="cancelbtn">Cancel</button>
+
+                        <button id="LogBTN" onclick="loginUser()" type="button">Login</button>
+                    </div>
+
+                </form>
+            </div>
+            <!--end-->
+            <!--register-->
+            <div id="userRegist" class="modal">
+              
+                <form id="regForm" class="modal-content">
+                    <div class="container">
+                        <h1>
+                            Sign Up
+                        </h1>
+                        <span onclick="document.getElementById('userRegist').style.display='none'" class="close" title="Close Modal">x</span>
+
+                        <label for="email"><b>Email</b></label>
+                        <input type="text" placeholder="Enter Email" id="newMail" name="email" required>
+
+                        <label for="FirstName"><b>First Name</b></label>
+                        <input type="text" placeholder="Enter First Name" id="Fname" name="firstName" required>
+
+
+                        <label for="FamilytName"><b>Family Name</b></label>
+                        <input type="text" placeholder="Enter Family Name" id="famName" name="familyName" required>
+
+                        <label for="psw"><b>Password</b></label>
+                        <input type="password" placeholder="Enter Password" id="newPassword" name="psw" required>
+
+
+                        <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember me
+
+
+
+                        <div class="clearfix">
+                            <button type="button" onclick="registerUsers()" id="signUp" class="signup">Sign Up</button>
+                        </div>
+                        <button type="button" onclick="document.getElementById('userRegist').style.display='none'" class="cancelbtn">Cancel</button>
+                    </div>
+                </form>
+            </div>
+            <!--end-->
+            <!--Update-->
+            <div id="userUpdate" class="modal">
+                <span onclick="document.getElementById('userUpdate').style.display='none'" class="close" title="Close Modal">x</span>
+                <form id="regForm" class="modal-content">
+                    <div class="container">
+                        <h1>
+                           Update
+                        </h1>
+
+
+                        <label for="email"><b>Email</b></label>
+                        <input type="text" placeholder="Enter Email" id="mail" name="email" disabled>
+
+                        <label for="FirstName"><b>First Name</b></label>
+                        <input type="text" placeholder="Enter First Name" id="MyName" name="firstName" >
+
+
+                        <label for="FamilytName"><b>Family Name</b></label>
+                        <input type="text" placeholder="Enter Family Name" id="MyfamilyName" name="familyName" >
+
+                        <label for="psw"><b>Password</b></label>
+                        <input type="password" placeholder="Enter Password" id="Mypassword" name="psw" >
+
+
+                        <div class="clearfix">
+                            <button type="button" onclick="UpdateMe()" id="update" >Update</button>
+                        </div>
+                        <button type="button" onclick="document.getElementById('userUpdate').style.display='none'" class="cancelbtn">Cancel</button>
+                    </div>
+                </form>
+            </div>
+            <!--end-->
+        </div>
+        <div class="container">
+            <h1 class="secondT">Write your flat</h1>
+            <form id="Fform">
+                <table>
+                    <tr>
+                        <td>Id</td>
+                        <td><input type="number" id="IdTB" required /></td>
+                    </tr>
+                    <tr>
+                        <td>City</td>
+                        <td>
+                            <div class="form-group">
+                                <input type="text" list="cities" class="form-control" id="CityTB" required />
+                                <datalist id="cities">
+                                    <option value="Beer Sheva">Beer Sheva</option>
+                                    <option value="Nahariya">Nahariya</option>
+                                    <option value="Hadera">Hadera</option>
+                                    <option value="Haifa">Haifa</option>
+                                    <option value="Tiberias">Tiberias</option>
+                                    <option value="Pardes Hanna">Pardes Hanna</option>
+                                    <option value="Netanya">Netanya</option>
+                                    <option value="Herzliya">Herzliya</option>
+                                    <option value="Tel Aviv">Tel Aviv</option>
+                                    <option value="Jerusalem">Jerusalem</option>
+                                    <option value="Kfar Sabba">Kfar Sabba</option>
+                                    <option value="Mitzpe Ramon">Mitzpe Ramon</option>
+                                    <option value="Eilat">Eilat</option>
+                                </datalist>
+                            </div>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Address</td>
+                        <td><input type="text" id="AdTB" maxlength="25" required /></td>
+                    </tr>
+                    <tr>
+                        <td>Number of rooms</td>
+                        <td><input type="number" id="RoomTB" min="1" max="8" required /></td>
+                    </tr>
+                    <tr>
+                        <td>Price</td>
+                        <td><input type="number" id="PriceTB" required /></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="submit" id="submitBTN" value="submit me" />
+
+                        </td>
+                    </tr>
+
+                </table>
+
+            </form>
+        </div>
+        <div class="container">
+            <h1 class="secondT">All flats</h1>
+
+            <div class="row" id="ph">
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
