@@ -1,0 +1,810 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>FindMyFood</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link href="סטייל_שניוקטיה.css" rel="stylesheet" />
+
+ 
+
+</head>
+<body dir="rtl" onload="f3(), init() ">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12" id="top">
+
+                <h3 id="myTitle">Welcome to FindMyFood <img id="logo" src="img/logo.png" /></h3>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class=" col-sm-4 col-md-4 col-lg-4">
+                <p id="welcomes"></p>
+                <input type="button" class="btn btn-info btn-lg registration" value="הרשמה" onclick="document.getElementById('userRegist').style.display='block'" />
+                <input type="button" class="btn btn-info btn-lg registration" value="התחברות" onclick="document.getElementById('userLogin').style.display='block'" />
+
+            </div>
+            <div class=" col-sm-2 col-md-6 col-lg-6">
+                <p id="food"> איך תרצו לקבל את האוכל שלכם?</p>
+
+            </div>
+            <div class=" col-sm-6 col-md-2 col-lg-2">
+                <button type="button" class="btn btn-lg favorite" onclick="showFavorites()">מועדפים</button>
+
+            </div>
+        </div>
+        <!--login-->
+        <div id="userLogin" class="modal">
+            <span onclick="document.getElementById('userLogin').style.display='none'"
+                  class="close" title="Close Modal">&times;</span>
+
+            <!-- Modal Content -->
+            <form class="modal-content " id="loginForm">
+                <div class="imgcontainer">
+
+                    <img src="img/logo.png" alt="Avatar" class="avatar" />
+                </div>
+
+                <div class="container">
+                    <label for="uname"><b>מייל-שם משתמש</b></label>
+                    <input type="text" id="regUsername" placeholder="Enter Username" name="uname" required>
+
+                    <label for="psw"><b>סיסמא</b></label>
+                    <input type="password" id="regPassword" placeholder="Enter Password" name="psw" required>
+
+
+                    <label>
+                        <input type="checkbox" checked="checked" name="remember"> Remember me
+                    </label>
+                </div>
+
+                <div class="clearfix">
+                    <button type="button" onclick="document.getElementById('userLogin').style.display='none'" class="cancelbtn">Cancel</button>
+
+                    <button id="LogBTN" onclick="loginUser()" type="button">Login</button>
+                </div>
+
+            </form>
+        </div>
+        <!--end-->
+        <!--register-->
+        <div id="userRegist" class="modal">
+            <span onclick="document.getElementById('userRegist').style.display='none'" class="close" title="Close Modal">x</span>
+            <form id="firstForm" class="modal-content">
+                <div class="container">
+                    <h1>
+                        Sign Up
+                    </h1>
+                    <p>על מנת שתוכל להנות מהשירות אנא הירשם בטופס הבא</p>
+
+                    <img id="regImg" src="img/logo.png" />
+                    <hr>
+                    <label for="email"><b>מייל</b></label>
+                    <input type="text" placeholder="Enter Email" id="newMail" name="email" required>
+
+                    <label for="psw"><b>סיסמא</b></label>
+                    <input type="password" placeholder="Enter Password" id="newPassword" name="psw" required>
+
+                    <label for="psw-repeat"><b>חזור על הסיסמא</b></label>
+                    <input type="password" placeholder="Repeat Password" id="checkPassword" name="psw-repeat" required>
+
+                    <label>
+                        <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember me
+                    </label>
+
+
+                    <div class="clearfix">
+                        <button type="button" onclick=" registerUsers() " class="signup">Sign Up</button>
+                        <button type="button" onclick="document.getElementById('userRegist').style.display='none'" class="cancelbtn">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!--end-->
+        <!--favorite modal-->
+        <div id="favorits" class="modal">
+            <span onclick="document.getElementById('favorits').style.display='none'"
+                  class="close" title="Close Modal">&times;</span>
+
+            <!-- Modal Content -->
+            <form class="modal-content " id="FavoritsForm">
+                <div class="container">
+                    <h3><b>המועדפים שלי</b></h3>
+                    <div class="row" id="spaceOfResturasnts">
+
+                    </div>
+                </div>
+
+                <div class="clearfix">
+                    <button type="button" onclick="document.getElementById('favorits').style.display='none'" class="cancelbtn">Cancel</button>
+
+                </div>
+
+            </form>
+        </div>
+        <!--end-->
+        <!--order modal-->
+        <div id="myOrderModal" class="orderModal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <!-- Display menu items -->
+                
+                <h2>Starters</h2>
+                <ul id="appetizersList"></ul>
+
+                <h2>Main Dishes</h2>
+                <ul id="mainList"></ul>
+
+                <h2>Extras</h2>
+                <ul id="extrasList"></ul>
+
+                <h2>Cart</h2>
+                <ul id="cartList"></ul>
+
+                <!-- Order button -->
+                <div class="row">
+                    <div class="col-lg-6">
+                        <button id="leftBTN" onclick="placeOrder()">click here to see your order</button>
+                    </div>
+                    <div class="col-lg-6">
+                        <button id="rightBTN" onclick="closeModal()">Close</button>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!--end-->
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 button">
+                <button id="delivery" class="btnBig btn2" data-id="btn2" name="howtoGive" onclick="f1()">משלוח</button>
+                <button id="takeAway" class="btnBig btn2" data-id="btn2" name="howtoGive" onclick="f2()">לשבת במסעדה </button>
+
+
+
+            </div>
+        </div>
+
+        <div class="row">
+
+            <!--right down div-->
+            <div class="col-4" id="DownRigthDiv">
+                <h3><u><b>על מה נלך הפעם?</b></u></h3>
+                <div class="row">
+                    <div class="col-12" id="btns">
+
+                    </div>
+                </div>
+            </div>
+
+            <!--left down div-->
+            <div class="col-8" id="DownleftDiv">
+                <h3><u><b>וכמה נשקיע ?</b></u></h3>
+                <select id="price" onchange="costs()">
+                    <option value="0">choose</option>
+                    <option value="1">0-500</option>
+                    <option value="2">501-999</option>
+                    <option value="3">1000+</option>
+                </select>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="row" id="try">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="Restaurants.js"></script>
+    <script src="menu.js"></script>
+    <script>
+        var deliveryOrRestaurant = "";
+        var finalArr = [];
+        var btnD = document.getElementById("delivery");
+        var btnT = document.getElementById("takeAway");
+        var typeFood = document.getElementsByClassName("myBTN");
+        var restaurantType = '';
+        var usersEmails = [];
+        var check = 0;                      
+        var currentFavorites = [];
+
+        function getDefaultState() {
+            var emptyState = {
+                'registers': {},
+                'curentUser': {},
+                'usersFavorites': {}
+            };
+            return emptyState;        
+        };
+
+        function getDataFromLocalStorage() {            
+            var data = null;
+            if (localStorage["igroup53"] != undefined) {
+                data = JSON.parse(localStorage["igroup53"]);
+            } else {
+                data = getDefaultState();
+            }
+            return data;
+        }
+
+        function setDataToLocalStorage(data) {
+            localStorage["igroup53"] = JSON.stringify(data);
+        }
+
+
+        function f1() {
+         /*   $(".littleDivs").toggle(1000);*/
+
+            /*btnT.disabled = !btnT.check;*/
+            check++;
+
+            if (btnT.check != true && check%2!=0) {
+
+            document.getElementById("delivery").style.backgroundColor = "black";
+                deliveryOrRestaurant = "delivery";
+           
+            calculateData();
+            }
+
+      
+            else {
+
+                document.getElementById("delivery").style.backgroundColor = "#26495c";
+           
+            }
+        }
+        function f2() {
+
+            /* btnD.disabled = !btnD.check;*/
+            check++;
+
+            if (btnD.check !== true && check % 2 != 0) {
+                document.getElementById("takeAway").style.backgroundColor = "black";
+                deliveryOrRestaurant = "takeAway";
+           
+                calculateData();
+            }
+            else {
+                document.getElementById("takeAway").style.backgroundColor = "#26495c";
+        
+            }
+        }
+
+        function setRestaurantType(val) {
+            if (val == restaurantType) {
+                restaurantType = '';
+            } else {
+                restaurantType = val;
+            }
+
+            calculateData();
+
+        }
+
+        function f3() {
+            let arr = [];
+            s = 0;
+            for (var i = 0; i < Restaurants.length; i++) {
+                let str = Restaurants[i].Cuisines;
+
+                if (str.includes(",")) {
+                    splitStr = str.split(",");
+                    for (var j = 0; j < splitStr.length; j++) {
+                        arr[s] = splitStr[j].trim();
+                        s++;
+                    }
+                }
+
+                else {
+                    arr[s] = Restaurants[i].Cuisines.trim();
+                    s++;
+                }
+
+            }
+            distinct = Array.from(new Set(arr)).sort();
+
+            for (var i = 0; i < distinct.length; i++) {
+                let str = ` <button type="button" class="btn btn-outline-dark myBTN" onclick="setRestaurantType('${distinct[i]}')" > ${distinct[i]}</button>`;
+                document.getElementById("btns").innerHTML += str;
+
+            }
+
+
+        }
+
+
+        function costs() {
+
+            let arr1 = [];
+
+            document.getElementById("try").innerHTML = "";
+            document.getElementById("try").innerHTML = "Please wait for calculation";
+            let priceValue = document.getElementById("price").value;
+
+            switch (priceValue) {
+                case "1"://0-500
+                    arr1 = finalArr.filter(element => {
+
+                        return element[`Average Cost for two`] <= 500;
+                    });
+                    if (arr1.length == 0) {
+                        alert(" אין מסעדות רלוונטיות");
+                    }
+                    break;
+                case "2"://500-1000
+                    arr1 = finalArr.filter(element => {
+
+                        return element[`Average Cost for two`] > 500 && element[`Average Cost for two`] <= 999;
+                    });
+                    if (arr1.length == 0) {
+                        alert(" אין מסעדות רלוונטיות");
+                    }
+                    break;
+                case "3": //1000 +
+                    arr1 = finalArr.filter(element => {
+
+                        return element[`Average Cost for two`] >= 1000;
+                    });
+                    if (arr1.length == 0) {
+                        alert(" אין מסעדות רלוונטיות");
+                    }
+                    break;
+                default:
+                    arr1 = finalArr;
+                    break;
+            }
+            let result = "";
+            for (var i = 0; i < arr1.length; i++) {
+               
+                if (document.getElementById("welcomes").innerHTML != "") {
+                    result += ` <div  class="littleDivs col-xl-3 col-l-3 col-md-4 col-xs-6 col-s-6" >
+                                  <h5 class="names">${arr1[i]['Restaurant Name']}</h5><br />
+                                    <img class="img-thumbnail" src="food img/dinner-02.jpg" />
+                                    <p class="details">
+                                        address: ${arr1[i]['Address']}<br/>
+                                        cuisin: ${arr1[i]['Cuisines']}<br />
+                                        Table booking: ${arr1[i]['Has Table booking']}<br />
+                                        delivery: ${arr1[i]['Has Online delivery']}<br />
+                                        avg rating:${arr1[i]['Aggregate rating']}<br />
+                                        text rating:${arr1[i]['Rating text']}<br />
+                                        cost:${arr1[i]['Average Cost for two']}<br />
+                                    </p>
+              <button type="button" class="btn btn-lg order"  onclick="orderIt()"><b>הזמן</b></button>
+                 <button class="btn lev"  onclick="addToFavorites(${arr1[i]['Restaurant ID']})" > <i class="material-icons">favorite</i></button>
+                  
+                                </div>`;
+                }
+                else {
+                    result += ` <div  class="littleDivs col-xl-3 col-l-3 col-md-4 col-xs-6 col-s-6" >
+                                  <h5 class="names">${arr1[i]['Restaurant Name']}</h5><br />
+                                    <img class="img-thumbnail" src="food img/dinner-02.jpg" />
+                                    <p class="details">
+                                        address: ${arr1[i]['Address']}<br/>
+                                        cuisin: ${arr1[i]['Cuisines']}<br />
+                                        Table booking: ${arr1[i]['Has Table booking']}<br />
+                                        delivery: ${arr1[i]['Has Online delivery']}<br />
+                                        avg rating:${arr1[i]['Aggregate rating']}<br />
+                                        text rating:${arr1[i]['Rating text']}<br />
+                                        cost:${arr1[i]['Average Cost for two']}<br />
+                                    </p>
+                                    </div>`;
+                }
+            }
+        
+          
+            
+            setTimeout(function () {
+                document.getElementById("try").innerHTML = result;
+            }, 500);
+
+        }
+
+
+        function calculateData() {
+            let m = 0;
+            finalArr = [];
+            if (deliveryOrRestaurant === "delivery") {
+
+                for (var i = 0; i < Restaurants.length; i++) {
+                    if (Restaurants[i]["Has Online delivery"] == "Yes") {
+                        finalArr.push(Restaurants[i]);
+                        m++;
+
+
+                    }
+                }
+
+            }
+
+            if (deliveryOrRestaurant === "takeAway") {
+
+                for (var i = 0; i < Restaurants.length; i++) {
+                    if (Restaurants[i]["Has Table booking"] == "Yes") {
+
+                        finalArr.push(Restaurants[i]);
+                        m++;
+
+
+                    }
+                }
+
+
+            }
+            if ((document.getElementById("delivery").style.backgroundColor != "black") && (document.getElementById("takeAway").style.backgroundColor != "black")) {
+                alert("please choose where u wanna eat");
+            }
+
+            if (restaurantType !== '') {
+
+                finalArr = finalArr.filter(element => {
+
+                    return element[`Cuisines`].includes(restaurantType);
+                });
+
+            }
+
+            if (finalArr.length == 0) {
+                document.getElementById("try").innerHTML = `אין מסעדות רלוונטיות`;
+            }
+            else {
+                costs();
+
+            }
+
+
+        }
+
+        function init() {
+            igroup53 = getDataFromLocalStorage();
+        }
+        function registerUsers() {
+            var username = document.getElementById("newMail").value;
+            var password = document.getElementById("newPassword").value;
+            let chacking = document.getElementById("checkPassword").value;
+
+            var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (password == chacking && emailPattern.test(username) && (username !== "" && password !== "" && chacking !== "")) {
+
+
+                if (igroup53.registers[username] == undefined) {
+                    igroup53.registers[username] = {};
+                }
+                else {
+                    alert("המייל הזה כבר תפוס- נסה אחד אחר");
+                    return;
+                }
+
+                alert("תודה על הרשמתך,אנא עבור אל כפתור התחברות");
+                let register = { username: username, password: password };
+                igroup53.registers[username] = register;
+                localStorage["igroup53"] = JSON.stringify(igroup53);
+                document.getElementById('userRegist').style.display = 'none'
+            }
+
+            else {
+                if (password != chacking) {
+                    alert("סיסמאות לא תואמות");
+                }
+
+                if (username === "" || password === "" || chacking === "") {
+                    alert("אנא מלא את כל השדות הנדרשים");
+                }
+
+                if (!emailPattern.test(username)) {
+                    alert("אנא רשום את המייל שלך בבקשה");
+                }
+
+            }
+
+
+
+        }
+
+
+        function loginUser(usernameKnown, passwordKnown) {
+            //*** current user details
+            var usernameKnown = document.getElementById("regUsername").value;
+            var passwordKnown = document.getElementById("regPassword").value;
+            let curentUser = { username: usernameKnown, password: passwordKnown };
+
+            // *** igroup53 = state in the local storage for all "database"
+            // *** curentUser => field in the igroup53 for just one (single) user = the user that just now loged in
+            // *** registers => field in the igroup53 for all users that loged in, array
+
+            // *** first we need to get the igroup53 object from the local storage befor update - we need to update the both fields on each login:
+            // *** 1. current user for this user
+            // *** 2. add this current user to the all users list => registers
+
+            // *** get the igroup53 objects from the login
+            var igroup53 = getDataFromLocalStorage();
+           
+            // *** check if current user exists in the registers           
+            if (igroup53.registers.length == 0 || igroup53.registers[usernameKnown] == undefined) {
+                alert("לא קיים משתמש כזה");
+                return;
+            }
+            if (igroup53.registers[usernameKnown].password != passwordKnown) {
+                alert("סיסמא לא נכונה");
+                return;
+            }
+            else {
+                // *** current user exists in the registers - we need to add the current user to the 'current user' field
+                // *** current user is single one, not array                
+                igroup53.curentUser = curentUser;
+                // *** save updated state to the local storage
+                localStorage["igroup53"] = JSON.stringify(igroup53);
+                alert("ברוך הבא משתמש יקר, במידה ותרצה להזמין כעת נא לחץ על הדרך שבה תרצה לבחור את האוכל שלך");
+                let w = `ברוך הבא :${curentUser['username']} <button type="button" onclick=" signout()" class="outBtn">צא</button>
+`;
+             /*   document.getElementById("welcomes").innerHTML == w;*/
+                $("#welcomes").html(w);
+                costs();
+                document.getElementById('userLogin').style.display = 'none';
+            }
+
+        }
+
+        function signout() {           
+            // *** get data from local storage first
+            var data = getDataFromLocalStorage();
+            // *** check current user            
+            if (data.curentUser != null && data.curentUser.username != null) {
+                // *** remove current user
+                data.curentUser = {};
+                // *** save data again to the local storage
+                setDataToLocalStorage(data);
+
+            } 
+            $("#welcomes").hide(1000);
+            $("#welcomes").empty();
+            $("#favorits").hide(1000);
+            window.location.reload();
+        }
+       
+        
+      
+
+        function addToFavorites(restaurantID) {
+            //*** need to add to favorites the restaurant on click to the current user list
+            var data = getDataFromLocalStorage();
+            // *** get current user
+            var currentUser = data.curentUser;
+            if (currentUser != null && currentUser.username != null) {
+                var allFavorites = data.usersFavorites;
+                var currentUserFavorites = [];
+                if (allFavorites != null) {
+                    currentUserFavorites = allFavorites[currentUser.username];
+                    if (currentUserFavorites == null || currentUserFavorites == 'undefined') {
+                        currentUserFavorites = [];
+                    }
+                } 
+                // *** check if current restaurtan id already exists in the current user favorites
+                var currentIdIndex = currentUserFavorites.indexOf(restaurantID);
+                if (currentIdIndex == -1) {
+                    // *** if id not exists the index is -1
+                    currentUserFavorites.push(restaurantID);
+                }
+                
+                
+                data.usersFavorites[currentUser.username] = currentUserFavorites;
+                setDataToLocalStorage(data);
+
+            } else {
+                alert('Please login');
+            }
+
+            //TODO: remove this line
+        /*    var currentUserFavoritesFullDatga = getFavorites();*/
+
+            /*favorits.push(Restaurants["Restaurant Name"]);
+            localStorage["favorits"] = JSON.stringify(favorits);*/
+        }
+
+        function getFavorites() {
+            //*** need to get data from the local storage
+            var existingFavoritesForCurrentUser = [];
+            var data = getDataFromLocalStorage();
+            // *** get current user
+            var currentUser = data.curentUser;
+            if (currentUser != null && currentUser.username != null) {
+                var allFavorites = data.usersFavorites;
+                var currentUserFavorites = allFavorites[currentUser.username];
+                if (currentUserFavorites == null || currentUserFavorites == 'undefined') {
+                    currentUserFavorites = [];
+                }
+                if (currentUserFavorites.length > 0) {                    
+                    existingFavoritesForCurrentUser = Restaurants.filter((el) => {
+                        return currentUserFavorites.some((f) => {
+                            return f == el[`Restaurant ID`];
+                        });
+                    });  
+           
+                } else {
+                    alert('No favorites for current user');
+                }
+
+            } else {
+                alert('Please login');
+            }
+
+            return existingFavoritesForCurrentUser;
+            
+
+            /*favorits.push(Restaurants["Restaurant Name"]);
+            localStorage["favorits"] = JSON.stringify(favorits);*/
+        }
+     
+
+        function showFavorites() {
+            currentFavorites = getFavorites();
+            
+            let result = "";
+            for (var i = 0; i < currentFavorites.length; i++) {
+
+                result += ` <div  class="littleDivs col-xl-3 col-l-3 col-md-4 col-xs-6 col-s-6" >
+                                  <h5 class="names">${currentFavorites[i]['Restaurant Name']}</h5><br />
+                                    <img class="img-thumbnail" src="food img/dinner-02.jpg" />
+                                    <p class="details">
+                                        address: ${currentFavorites[i]['Address']}<br/>
+                                        cuisin: ${currentFavorites[i]['Cuisines']}<br />
+                                        Table booking: ${currentFavorites[i]['Has Table booking']}<br />
+                                        delivery: ${currentFavorites[i]['Has Online delivery']}<br />
+                                        avg rating:${currentFavorites[i]['Aggregate rating']}<br />
+                                        text rating:${currentFavorites[i]['Rating text']}<br />
+                                        cost:${currentFavorites[i]['Average Cost for two']}<br />
+                                    </p>
+               <button type="button" class="btn btn-lg order" onclick="removeIt(event,'${currentFavorites[i]['Restaurant ID']}')"><b>הסר</b></button>
+                                </div>`;
+            }
+            
+
+            setTimeout(function () {
+                document.getElementById("spaceOfResturasnts").innerHTML = result;
+                document.getElementById('favorits').style.display = 'block'
+            }, 1);
+            // *** show div
+            
+        }
+        //do a remove from fav
+        function removeIt(event,restID) {
+          
+            const myArray = igroup53.usersFavorites;
+            var currentUser = igroup53.curentUser.username;
+         
+            for (var i = 0; i < myArray[currentUser].length; i++) {
+                if (myArray[currentUser][i] == restID) {
+                   myArray[currentUser][i]=="" ;
+                  
+                    var element = event.currentTarget; // Get the clicked button element
+            var parentDiv = element.parentNode; // Get the parent div (littleDivs)
+                    parentDiv.remove('.littleDivs'); // Remove the parent div from the DOM
+                }            }
+   
+        }
+
+
+
+        //***ORDERS */
+        const modal = document.getElementById("myOrderModal");
+        function orderIt() {
+            modal.style.display = "block";
+            displayMenuItems();
+        }
+        function closeModal() {
+            modal.style.display = "none";
+        }
+        // Function to display the menu items in the modal
+        function displayMenuItems() {
+            const appetizersList = document.getElementById("appetizersList");
+            const mainDishesList = document.getElementById("mainList");
+            const extrasList = document.getElementById("extrasList");
+
+            // Display starters
+            menu.appetizers.forEach(item => {
+                const li = document.createElement("li");
+                li.textContent = `${item.name} - ${item.price}$`;
+
+                const addButton = document.createElement("button");
+                addButton.textContent = " Add to Cart";
+                addButton.addEventListener("click", () => addToCart(item));
+                li.appendChild(addButton);
+                appetizersList.appendChild(li);
+            });
+
+            // Display main dishes
+            menu.main.forEach(item => {
+                const li = document.createElement("li");
+                li.textContent = `${item.name} - ${item.price}$`;
+
+                const addButton = document.createElement("button");
+                addButton.textContent = "Add to Cart";
+                addButton.addEventListener("click", () => addToCart(item));
+                li.appendChild(addButton);
+                mainList.appendChild(li);
+            });
+            // Display side dishes/drinks
+            menu.extras.forEach(item => {
+                const li = document.createElement("li");
+                li.textContent = `${item.name} - ${item.price}$`;
+
+                const addButton = document.createElement("button");
+                addButton.textContent = "Add to Cart";
+                addButton.addEventListener("click", () => addToCart(item));
+
+                li.appendChild(addButton);
+                extrasList.appendChild(li);
+            });
+        }
+        // Cart array
+        let cart = [];
+
+        // Function to add an item to the cart
+        function addToCart(item) {
+            cart.push(item);
+        }
+        function placeOrder() {
+
+            if (cart.length === 0) {
+                alert("Your cart is empty. Please add items before placing an order.");
+                return;
+            }
+
+            // Calculate total price
+            let totalPrice = 0;
+            cart.forEach(item => {
+                totalPrice += item.price;
+            });
+
+            // Apply shipping cost
+            let shippingCost = totalPrice < 300 ? 10 : 0;
+
+            // Display order details
+            const cartList = document.getElementById("cartList");
+            cartList.innerHTML = "";
+
+            cart.forEach(item => {
+                const li = document.createElement("li");
+                li.textContent = `${item.name} - ${item.price}$`;
+                cartList.appendChild(li);
+                saveOrderToLocalStorage();
+
+            });
+
+            const totalLi = document.createElement("li");
+            totalLi.textContent = `Total Price: ${totalPrice}$`;
+            cartList.appendChild(totalLi);
+
+            const shippingCostLi = document.createElement("li");
+            shippingCostLi.textContent = `Shipping Cost: ${shippingCost}$`;
+            cartList.appendChild(shippingCostLi);
+
+        }
+        function saveOrderToLocalStorage() {
+            localStorage.setItem("cartOrder", JSON.stringify(cart));
+        }
+
+    </script>
+
+</body>
+
+
+
+
+
+</html>

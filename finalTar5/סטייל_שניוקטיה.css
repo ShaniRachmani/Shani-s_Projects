@@ -1,0 +1,452 @@
+﻿body {
+    text-align: center;
+    font-family: Bahnschrift;
+    background-color: antiquewhite;
+}
+
+#myTitle {
+    text-align: center;
+    color: aliceblue;
+    font-family: Bahnschrift;
+    font-size: 70px;
+}
+@media only screen and (max-width:768px) {
+    #myTitle {
+        text-align: center;
+        color: aliceblue;
+        font-family: Bahnschrift;
+        font-size: 50px;
+    }
+}
+#top {
+    background-image: url('img/מסעדה.jpg');
+    width:100%;
+   
+}
+
+#logo {
+    width: auto;
+    height: 300px;
+}
+
+.btnBig {
+    color: #fefefe;
+    background: #26495c;
+    -webkit-transition: none;
+    -moz-transition: none;
+    transition: none;
+    border: 4px solid #62757f;
+    text-align: center;
+    font-size: 35px;
+}
+
+.btn2 {
+    border-radius: 60px;
+    width: 100%;
+    height: 90px;
+}
+@media only screen and (min-width:992px){
+    .btn2 {
+        border-radius: 60px;
+        width: 500px;
+        height: 90px;
+    }
+}
+
+
+    .btn2:hover {
+        background: transparent;
+        color: #62757f;
+    }
+
+#food {
+    font-size: 45px;
+    padding-top: 15px;
+    float: right;
+    font-weight: bold;
+}
+
+.registration {
+    float: right;
+    margin-left: 20px;
+    padding-right: 10px;
+    width: 150px;
+    background-color: #c66b3d;
+}
+
+    .registration:hover {
+        background: transparent;
+        color: #62757f;
+    }
+
+#DownRigthDiv {
+    border: 3px dashed black;
+    height: 100%;
+    margin-top: 50px;
+}
+
+    #DownRigthDiv > h3, #DownleftDiv > h3 {
+        color: darkred;
+    }
+
+#DownleftDiv {
+    margin-top: 50px;
+    height:20px;
+}
+
+.myBTN {
+    background-color: #c4a35a;
+    color: white;
+}
+#price {
+    width: 50%;
+    text-align: center;
+}
+.littleDivs {
+    border: 2px #c4a35a solid;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+.names {
+    height: 60px;
+    margin: auto;
+    color: #26495c;
+}
+.details {
+    height: 350px;
+}
+.order {
+    color: black;
+    background: #a7beae;
+    width: 70%;
+}
+.lev {
+    color: #730C0D;
+}
+.favorite {
+    background-color: #730C0D;
+    color:aliceblue;
+}
+#welcomes {
+    height: 30%;
+    width: 100%;
+    color: #b4a284;
+    outline-color:black;
+}
+.outBtn {
+    width: 20%;
+    height:10%;
+    border-radius: 12px;
+    background-color: #b4a284;
+    padding-bottom: 20px;
+}
+/*modal login style*/
+#loginForm {
+    background-color: #FFD797;
+}
+input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+/* Set a style for all buttons */
+#LogBTN, .cancelbtn {
+    background-color: #99672E;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+    button:hover {
+        opacity: 0.8;
+    }
+
+/* Extra styles for the cancel button */
+.cancelbtn {
+    width: auto;
+    padding: 10px 18px;
+    background-color: #0B3133;
+}
+
+/* Center the image and position the close button */
+.imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+    position: relative;
+}
+
+img.avatar {
+    width: 40%;
+    border-radius: 50%;
+}
+
+.container {
+    padding: 16px;
+}
+
+span.psw {
+    float: right;
+    padding-top: 16px;
+}
+
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    padding-top: 60px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button (x) */
+.close {
+    position: absolute;
+    right: 25px;
+    top: 0;
+    color: #000;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+    .close:hover,
+    .close:focus {
+        color: red;
+        cursor: pointer;
+    }
+
+/* Add Zoom Animation */
+.animate {
+    -webkit-animation: animatezoom 0.6s;
+    animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+    from {
+        -webkit-transform: scale(0)
+    }
+
+    to {
+        -webkit-transform: scale(1)
+    }
+}
+
+@keyframes animatezoom {
+    from {
+        transform: scale(0)
+    }
+
+    to {
+        transform: scale(1)
+    }
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+    span.psw {
+        display: block;
+        float: none;
+    }
+
+    .cancelbtn {
+        width: 100%;
+    }
+}
+/*////////////////////////////////modal register style//////////////////////////////////////////*/
+* {
+    box-sizing: border-box
+}
+/* Full-width input fields */
+input[type=text], input[type=password] {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
+}
+
+    /* Add a background color when the inputs get focus */
+    input[type=text]:focus, input[type=password]:focus {
+        background-color: #ddd;
+        outline: none;
+    }
+
+/* Set a style for all buttons */
+.signup, .cancelbtn {
+    background-color: #04AA6D;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+}
+
+    .signup, .cancelbtn:hover {
+        opacity: 1;
+    }
+
+/* Extra styles for the cancel button */
+.cancelbtn {
+    padding: 14px 20px;
+    background-color: #0B3133;
+}
+
+/* Float cancel and signup buttons and add an equal width */
+.cancelbtn, .signupbtn {
+    float: left;
+    width: 50%;
+}
+
+/* Add padding to container elements */
+.container {
+    padding: 16px;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+
+    padding-top: 50px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* Style the horizontal ruler */
+hr {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 25px;
+}
+
+/* The Close Button (x) */
+.close {
+    position: absolute;
+    right: 35px;
+    top: 15px;
+    font-size: 40px;
+    font-weight: bold;
+    color: #f1f1f1;
+}
+
+    .close:hover,
+    .close:focus {
+        color: #f44336;
+        cursor: pointer;
+    }
+
+/* Clear floats */
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+/* Change styles for cancel button and signup button on extra small screens */
+@media screen and (max-width: 300px) {
+    .cancelbtn, .signupbtn {
+        width: 100%;
+    }
+}
+#regImg{
+    height:100px;
+    width:100px;
+}
+#FavoritsForm {
+    background-color: #e5e5dc;
+}
+.orderModal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#myOrderModal > .modal-content {
+    background-color: #CCBF7A;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 60%;
+    text-align: left;
+    color: white;
+    direction:ltr;
+}
+#appetizersList > li:nth-child(1) > button, #appetizersList > li:nth-child(2) > button, #appetizersList > li:nth-child(3) > button, #appetizersList > li:nth-child(4) > button, #appetizersList > li:nth-child(5) > button {
+    background-color: #99672E;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    margin-left: 80%;
+}
+#mainList > li:nth-child(1) > button, #mainList > li:nth-child(2) > button, #mainList > li:nth-child(3) > button, #mainList > li:nth-child(4) > button, #mainList > li:nth-child(5) > button {
+    background-color: #99672E;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    margin-left: 80%;
+}
+#extrasList > li:nth-child(1) > button, #extrasList > li:nth-child(2) > button, #extrasList > li:nth-child(3) > button, #extrasList > li:nth-child(4) > button, #extrasList > li:nth-child(5) > button {
+    background-color: #99672E;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    margin-left: 80%;
+}
+
+#leftBTN {
+    color: white;
+    width: 100%;
+    border-radius: 9px;
+    background-color: #A37321;
+    margin: auto;
+}
+#rightBTN {
+    color: white;
+    width: 100%;
+    border-radius: 9px;
+    background-color: #0B3133;
+    margin-bottom: 0;
+}
+#myOrderModal > div > h2:nth-child(7) {
+    color: #730C0D;
+}
+#myOrderModal > div > h2:nth-child(1), #myOrderModal > div > h2:nth-child(3), #myOrderModal > div > h2:nth-child(5) {
+    color: #0B3133;
+}

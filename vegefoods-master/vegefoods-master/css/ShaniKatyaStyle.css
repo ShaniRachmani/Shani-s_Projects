@@ -1,0 +1,153 @@
+﻿body {
+    font-family:Calibri;
+}
+
+.topper {
+    height: 40px;
+}
+.navbar-brand{
+    font-family:Calibri;
+    font-size:35px;
+
+}
+.logoSapir{
+    height: auto;
+    width:20%;
+}
+.melel {
+    font-size: 15px;
+    text-align: center;
+    font-weight: bold;
+    margin: auto;
+}
+.nav-link {
+    padding: 20px;
+    margin: auto;
+    width: 200px;
+    height: auto;
+}
+.dropdown04.nav-link dropdown-toggle{
+    margin:auto;
+}
+
+    #newslater {
+    background-color: #f7c789;
+    font-size: 50px;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    margin-left: 0;
+    margin-bottom: 0;
+}
+#ofenAhana{
+    width:100%;
+    text-align:center;
+    height:100%;
+}
+#posts{
+    margin:auto !important;
+    height:100%;
+    width:100%;
+    display:block;
+
+}
+
+#lables {
+    width: 100%;
+}
+tr {
+    height: 100%;
+    width: 100%;
+}
+.koteret {
+    font-weight: bold;
+    font-size: 25px;
+    color: #c27927;
+    
+}
+#DownDiv {
+    background-color: #f7c789;
+    width: 100%;
+    height: 300px;
+}
+
+#SapirImg {
+    height: 140px;
+    width: 140px;
+    margin: 0 auto;
+    display: block;
+}
+
+
+#DMD {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin:auto;
+}
+#emails{
+ 
+  width:auto;
+}
+
+.custom-control {
+    position: relative;
+    display: grid;
+    min-height: 1.5rem;
+    padding-left: 1.5rem;
+    text-align: right;
+}
+@media only screen and (max-width:600px){
+    .ftco-footer-social li a span {
+       padding-left:1px;
+    }
+    .category-wrap ftco-animate img mb-4 d-flex align-items-end {
+        height: 250px;
+        width: 360.5px;
+    }
+    .category-wrap ftco-animate img mb-4 d-flex align-items-end> background-image{
+        width:100%;
+    }
+}
+.matkonim{
+    max-width:100% !important;
+}
+
+#middle1, #middle2 {
+    padding-top: 5%;
+}
+#soupCategory{
+    width:100%;
+
+}
+.about{
+    text-align:center;
+}
+#DownDiv {
+    border-radius: 25px;
+    background: #f7c789;
+    padding: 20px;
+    width: 100%;
+    height: 100%;
+}
+.wrap-about .heading-section-bold h2 {
+    font-size: 40px;
+    font-weight: 600;
+    color: #c27927;
+}
+.align-items-center{
+    align-items:baseline !important;
+}
+.ingredients > h6 {
+    font-size: 15px;
+    font-weight: bold;
+    color: #c27927;
+    text-align: start
+}
+#ofenAhana > ul,li {
+   direction:rtl;
+    text-align: right;
+}
+#ofenAhana > ol {
+    text-align: right;
+}
+
